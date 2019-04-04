@@ -1,16 +1,8 @@
 package client
 
-import (
-	"errors"
-	"strings"
-	"sync"
+//"github.com/zzzhr1990/go-client-common/config"
 
-	log "github.com/sirupsen/logrus"
-
-	"github.com/zzzhr1990/go-client-common/config"
-	"google.golang.org/grpc"
-)
-
+/*
 //Manager manage connections
 type Manager struct {
 	connections  *sync.Map
@@ -124,3 +116,5 @@ func closeConnection(key interface{}, value interface{}) bool {
 	}
 	return true
 }
+
+*/
