@@ -1,17 +1,26 @@
 package client
 
-//"github.com/zzzhr1990/go-client-common/config"
+import (
+	"errors"
+	"strings"
+	"sync"
 
-/*
+	log "github.com/sirupsen/logrus"
+	// "github.com/zzzhr1990/go-client-common/config"
+
+	// "github.com/zzzhr1990/go-client-common/config"
+	"google.golang.org/grpc"
+)
+
 //Manager manage connections
 type Manager struct {
 	connections  *sync.Map
-	clientConfig *config.Client
+	clientConfig *Client
 	lock         *sync.RWMutex
 }
 
-//CreateNewManager new Manager..
-func CreateNewManager(clientConfig *config.Client) *Manager {
+//CreateNewManager new Manager
+func CreateNewManager(clientConfig *Client) *Manager {
 	return &Manager{
 		clientConfig: clientConfig,
 		lock:         new(sync.RWMutex),
@@ -116,5 +125,3 @@ func closeConnection(key interface{}, value interface{}) bool {
 	}
 	return true
 }
-
-*/
