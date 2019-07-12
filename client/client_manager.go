@@ -62,7 +62,7 @@ func (manager *Manager) GetConnection(serviceLabel string) (*grpc.ClientConn, er
 func (manager *Manager) createConnection(serviceLabel string) (*grpc.ClientConn, error) {
 	endpoint := manager.getEndpoints(serviceLabel)
 	log.Printf("Start Grpc Connection %v - %v", serviceLabel, endpoint)
-	conn, err := grpc.Dial(endpoint, grpc.WithInsecure())
+	conn, err := grpc.Dial(endpoint, grpc.WithInsecure(), grpc.WithMaxMsgSize(128*1024*1024))
 	if err != nil {
 		log.Printf("Failed to connect: %v - %v", serviceLabel, err)
 		return nil, err
