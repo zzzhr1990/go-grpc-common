@@ -9,18 +9,19 @@ import (
 	// "github.com/zzzhr1990/go-client-common/config"
 
 	// "github.com/zzzhr1990/go-client-common/config"
+	"github.com/zzzhr1990/go-common-entity/confs"
 	"google.golang.org/grpc"
 )
 
 //Manager manage connections
 type Manager struct {
 	connections  *sync.Map
-	clientConfig *Client
+	clientConfig *confs.GrpcClientConfig
 	lock         *sync.RWMutex
 }
 
 //CreateNewManager new Manager
-func CreateNewManager(clientConfig *Client) *Manager {
+func CreateNewManager(clientConfig *confs.GrpcClientConfig) *Manager {
 	return &Manager{
 		clientConfig: clientConfig,
 		lock:         new(sync.RWMutex),
