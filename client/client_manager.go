@@ -74,8 +74,8 @@ func (manager *Manager) createConnection(serviceLabel string) (*grpc.ClientConn,
 
 func (manager *Manager) getEndpoints(serviceLabel string) string {
 	endpoint := "localhost:8964"
-	if len(manager.clientConfig.DefaultEndPoint) > 0 {
-		endpoint = manager.clientConfig.DefaultEndPoint
+	if len(manager.clientConfig.DefaultEndpoint) > 0 {
+		endpoint = manager.clientConfig.DefaultEndpoint
 	}
 	preData := map[string]string{"${service-label}": serviceLabel, "${default-endpoint}": endpoint}
 	//manager.clientConfig.DefaultEndPoint
