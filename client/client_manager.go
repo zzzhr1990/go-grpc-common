@@ -2,10 +2,10 @@ package client
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"sync"
 
-	log "github.com/sirupsen/logrus"
 	// "github.com/zzzhr1990/go-client-common/config"
 
 	// "github.com/zzzhr1990/go-client-common/config"
@@ -53,7 +53,6 @@ func (manager *Manager) GetConnection(serviceLabel string) (*grpc.ClientConn, er
 	// stil no
 	conn, err := manager.createConnection(serviceLabel)
 	if err != nil {
-		log.Printf("Cannot get GRPC connection: %v, %v", serviceLabel, err)
 		return nil, err
 	}
 	manager.connections.Store(serviceLabel, conn)
@@ -62,11 +61,9 @@ func (manager *Manager) GetConnection(serviceLabel string) (*grpc.ClientConn, er
 
 func (manager *Manager) createConnection(serviceLabel string) (*grpc.ClientConn, error) {
 	endpoint := manager.getEndpoints(serviceLabel)
-	log.Printf("Start Grpc Connection %v - %v", serviceLabel, endpoint)
 	wscr := grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(128*1024*1024), grpc.MaxCallSendMsgSize(128*1024*1024))
 	conn, err := grpc.Dial(endpoint, grpc.WithInsecure(), wscr)
 	if err != nil {
-		log.Printf("Failed to connect: %v - %v", serviceLabel, err)
 		return nil, err
 	}
 	return conn, nil
@@ -86,8 +83,8 @@ func (manager *Manager) getEndpoints(serviceLabel string) string {
 		return formatTemplate(&preData, val)
 	}
 	if manager.clientConfig.AutoDiscovery.DiscoveryType == "eureka" || manager.clientConfig.AutoDiscovery.DiscoveryType == "etcd" {
-		log.Printf("Cannot support autoDiscoveryType %v now.", manager.clientConfig.AutoDiscovery.DiscoveryType)
-		return formatTemplate(&preData, endpoint)
+		panic(fmt.Sprintf("Cannot support autoDiscoveryType %v now.", manager.clientConfig.AutoDiscovery.DiscoveryType))
+		// return formatTemplate(&preData, endpoint)
 	}
 	autoDiscoveryTemplate := "${default-endpoint}"
 	if len(manager.clientConfig.AutoDiscovery.Template) > 0 {
@@ -96,7 +93,6 @@ func (manager *Manager) getEndpoints(serviceLabel string) string {
 	if manager.clientConfig.AutoDiscovery.DiscoveryType == "none" || manager.clientConfig.AutoDiscovery.DiscoveryType == "istio" {
 		return formatTemplate(&preData, autoDiscoveryTemplate)
 	}
-	log.Printf("Could find GRPC endpoints setting for %v, using default setting.", serviceLabel)
 	return endpoint
 
 }
@@ -115,14 +111,12 @@ func formatTemplate(preData *map[string]string, template string) string {
 }
 
 func closeConnection(key interface{}, value interface{}) bool {
-	str, ok := key.(string)
+	_, ok := key.(string)
 	if ok {
 		val, suc := value.(*grpc.ClientConn)
 		if suc {
-			err := val.Close()
-			if err != nil {
-				log.Printf("Close Grpc connection %v error %v", str, err)
-			}
+			val.Close()
+
 		}
 	}
 	return true
