@@ -18,4 +18,7 @@ var (
 	ErrUnsupportDownload = status.Errorf(codes.InvalidArgument, "UNSUPPORT_DOWNLOAD")
 	// ErrEmptyPath empty identity
 	ErrEmptyPath = status.Errorf(codes.InvalidArgument, "EMPTY_PATH")
+
+	// ErrTaskBaseLocked empty identity
+	ErrTaskBaseLocked = status.Errorf(codes.FailedPrecondition, "TASK_BASE_LOCKED")
 )
